@@ -26,10 +26,10 @@ public class AnswerController {
     private final UserService userService;
 
     @GetMapping("/list")
-    public String answerList(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+    public String answerList(Model model, @RequestParam(value = "page", defaultValue = "0") int page, Answer answer) {
         Page<Answer> pagingA = this.answerService.answerList(page);
         model.addAttribute("pagingA", pagingA);
-        return "question_detail";
+        return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());
     }
 
     @PreAuthorize("isAuthenticated()")

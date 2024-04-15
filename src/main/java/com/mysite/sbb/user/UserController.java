@@ -23,7 +23,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) { // 입력한 값을 쓸 수 있는지 판별함
             return "signup_form";
         }
         if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {

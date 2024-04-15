@@ -53,7 +53,7 @@ public class QuestionController {
         if (bindingResult.hasErrors()) {
             return "question_form";
         }
-        SiteUser siteUser = this.userService.getUser(principal.getName());
+        SiteUser siteUser = this.userService.getUser(principal.getName()); // 질문 저장 및 사용자명 구하기
         this.questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser);
         return "redirect:/question/list";
     }
