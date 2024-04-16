@@ -59,7 +59,7 @@ public class AnswerController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
     public String answerModify(@Valid AnswerForm answerForm, BindingResult bindingResult, @PathVariable("id") Integer id, Principal principal) {
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) { // 필드 필수 오류, 유효성 검사 오류, 타입 변환 오류
             return "answer_form";
         }
         Answer answer = this.answerService.getAnswer(id);

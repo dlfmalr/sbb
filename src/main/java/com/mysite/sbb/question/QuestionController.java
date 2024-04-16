@@ -84,7 +84,7 @@ public class QuestionController {
         return String.format("redirect:/question/detail/%s", id); // String.format는 문자열로 변환해서 사용하고 있기 때문에 id자리를 문자열로 인식한다.
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()") // 로그인 상태에서만 기능 사용가능
     @GetMapping("/delete/{id}")
     public String questionDelete(Principal principal, @PathVariable("id") Integer id) {
         Question question = this.questionService.getQuestion(id);
