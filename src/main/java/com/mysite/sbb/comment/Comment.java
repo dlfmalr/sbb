@@ -1,6 +1,7 @@
 package com.mysite.sbb.comment;
 
 import com.mysite.sbb.answer.Answer;
+import com.mysite.sbb.user.SiteUser;
 import groovyjarjarpicocli.CommandLine;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,5 +25,7 @@ public class Comment {
     @ManyToOne
     private Answer answer;
 
+    @ManyToOne
+    private SiteUser author;
 
 }
