@@ -2,6 +2,7 @@ package com.mysite.sbb.question;
 
 import com.mysite.sbb.DataNotFoundException;
 import com.mysite.sbb.answer.Answer;
+import com.mysite.sbb.answer.AnswerRepository;
 import com.mysite.sbb.user.SiteUser;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
 
     private Specification<Question> search(String kw) {
         return new Specification<>() {
@@ -84,4 +86,16 @@ public class QuestionService {
         this.questionRepository.save(question);
     }
 
+//    public Page<Answer> getAnswers(int page, int pageSize) {
+//        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "createDate"));
+//        return answerRepository.findAll(pageable);
+//    }
+
+
+//    public Page<Answer> getAnswer(int page, String kw) {
+//        List<Sort.Order> sorts = new ArrayList<>();
+//        sorts.add(Sort.Order.desc("createDate"));
+//        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+//        return this.answerRepository.findAll(pageable);
+//    }
 }

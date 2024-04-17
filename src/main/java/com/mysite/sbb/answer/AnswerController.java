@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
@@ -25,16 +26,16 @@ public class AnswerController {
     private final AnswerService answerService;
     private final UserService userService;
 
-    @GetMapping("/list")
-    public String answerList(Model model, @RequestParam(value = "page", defaultValue = "0") int page, Answer answer) {
-        Page<Answer> pagingA = this.answerService.answerList(page);
-        model.addAttribute("pagingA", pagingA);
-        return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());
-    }
+//    @GetMapping("/list")
+//    public String answerList(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+//        Page<Answer> paging = this.answerService.answerList(page);
+//        model.addAttribute("paging", paging);
+//        return "question_detail";
+//    }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/{id}")
-    public String createAnswer(Model model, @PathVariable("id") Integer id, @Valid AnswerForm answerForm, BindingResult bindingResult, Principal principal) {
+    public String createAnswer(Model model, @PathVariable("id") Integer id, @Valid AnswerForm answerForm, BindingResult bindingResult, Principal principal, RedirectAttributes re) {
         Question question = this.questionService.getQuestion(id);
         SiteUser siteUser = this.userService.getUser(principal.getName());
         if (bindingResult.hasErrors()) {
@@ -42,7 +43,8 @@ public class AnswerController {
             return "question_detail";
         }
         Answer answer = this.answerService.create(question, answerForm.getContent(), siteUser);
-//        this.answerService.create(question, answerForm.getContent(), siteUser);
+        int page = question.getAnswerList().size() / 10;
+        re.addAttribute("answerPage", page);
         return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());
     }
 

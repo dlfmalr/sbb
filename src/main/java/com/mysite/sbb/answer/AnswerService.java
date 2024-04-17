@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -56,11 +55,12 @@ public class AnswerService {
         this.answerRepository.save(answer);
     }
 
-    public Page<Answer> answerList(int page) {
+    public Page<Answer> getList(Question question, int page) {
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageableA = PageRequest.of(page, 10, Sort.by(sorts));
-        return this.answerRepository.findAll(pageableA);
+        sorts.add(Sort.Order.asc("createDate"));
+        sorts.add(Sort.Order.desc("voter"));
+        Pageable pageable = PageRequest.of(page, 5);
+        return this.answerRepository.findAllByQuestion(question, pageable);
     }
 
 
