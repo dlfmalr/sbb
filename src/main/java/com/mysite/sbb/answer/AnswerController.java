@@ -6,13 +6,15 @@ import com.mysite.sbb.user.SiteUser;
 import com.mysite.sbb.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -26,12 +28,6 @@ public class AnswerController {
     private final AnswerService answerService;
     private final UserService userService;
 
-//    @GetMapping("/list")
-//    public String answerList(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
-//        Page<Answer> paging = this.answerService.answerList(page);
-//        model.addAttribute("paging", paging);
-//        return "question_detail";
-//    }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/{id}")
@@ -43,7 +39,7 @@ public class AnswerController {
             return "question_detail";
         }
         Answer answer = this.answerService.create(question, answerForm.getContent(), siteUser);
-        int page = question.getAnswerList().size() / 10;
+        int page = question.getAnswerList().size() / 5;
         re.addAttribute("answerPage", page);
         return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());
     }
