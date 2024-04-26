@@ -76,7 +76,7 @@ public class AnswerController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
         this.answerService.delete(answer);
-        return String.format("redirect:/question/detail/id", answer.getQuestion().getId());
+        return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
     }
 
     @PreAuthorize("isAuthenticated()")
