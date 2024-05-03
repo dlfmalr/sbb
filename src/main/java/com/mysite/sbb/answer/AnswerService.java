@@ -59,9 +59,17 @@ public class AnswerService {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         sorts.add(Sort.Order.desc("voter"));
-        Pageable pageable = PageRequest.of(page, 5);
-        return this.answerRepository.findAllByQuestion(question, pageable);
+        Pageable pageable = PageRequest.of(page, 10);
+        return this.answerRepository.findByQuestion(question, pageable);
     }
 
+    public Page<Answer> getListSortedByVotes(Question question, int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createDate"));
+        return answerRepository.findByQuestionSortedByVoterSize(question, pageable);
+    }
 
+    public Page<Answer> getListSortedByCreateDate(Question question, int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createDate"));
+        return answerRepository.findByQuestion(question, pageable);
+    }
 }

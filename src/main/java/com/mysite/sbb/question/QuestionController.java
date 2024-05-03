@@ -38,12 +38,20 @@ public class QuestionController {
         return "question_list";
     }
 
-    @GetMapping(value = "/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm, @RequestParam(value = "answerPage", defaultValue = "0") int answerPage) {
+    @GetMapping("/detail/{id}")
+    public String detail(Model model, @PathVariable("id") Integer id,
+                         @RequestParam(value = "answerPage", defaultValue = "0") int answerPage,
+                         @RequestParam(value = "sort", defaultValue = "createDate") String sort, AnswerForm answerForm) {
         Question question = this.questionService.getQuestion(id);
-        Page<Answer> answerPaging = this.answerService.getList(question, answerPage); // answer 페이징 기능
+        Page<Answer> answerPaging;
+        if (sort.equals("votes")) {
+            answerPaging = this.answerService.getListSortedByVotes(question, answerPage);
+        } else {
+            answerPaging = this.answerService.getListSortedByCreateDate(question, answerPage);
+        }
+        model.addAttribute("sort", sort);
+        model.addAttribute("answerPaging", answerPaging);
         model.addAttribute("question", question);
-        model.addAttribute("answerPaging", answerPaging); // answer 페이징 기능
         return "question_detail";
     }
 

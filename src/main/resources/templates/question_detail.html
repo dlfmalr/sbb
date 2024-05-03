@@ -36,27 +36,16 @@
             </div>
         </div>
     </div>
-    <form th:action="@{|/question/detail/${question.id}|}" method="get">
-        <select name="sort" id="sort">
-            <option value="votes">추천순</option>
-            <option value="latest">최신순</option>
+    <form>
+        <select onchange="location.href=this.value;">
+            <option th:value="@{/question/detail/{id}(id=${question.id}, sort='createDate')}"
+                    th:selected="${sort == 'createDate'}">최신순</option>
+            <option th:value="@{/question/detail/{id}(id=${question.id}, sort='votes')}"
+                    th:selected="${sort == 'votes'}">추천순</option>
         </select>
-        <button type="submit">정렬하기</button>
     </form>
 
-    <div class="answer-list">
-        <div class="border-bottom my-3 py-2" th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|">
-            <div class="answer" th:id="'answer_' + ${answer.id}">
-                <p th:text="${answer.content}"></p>
-                <p>추천수: <span th:text="${#lists.size(answer.voter)}"></span></p>
-                <a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-secondary"
-                    th:data-uri="@{|/answer/vote/${answer.id}|}">
-                    추천
-                    <span class="badge rounded-pill bg-success" th:text="${#lists.size(answer.voter)}"></span>
-                </a>
-            </div>
-        </div>
-    </div>
+
     <div class="card my-3" th:each="answer : ${answerPaging}">
         <a th:id="@{|answer_${answer.id}|}"></a>
         <div class="card-body">
@@ -112,8 +101,7 @@
     </div>
     <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
-        <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control"
-            rows="10"></textarea>
+        <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
         <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
         <input type="submit" value="답변등록" class="btn btn-primary my-2">
     </form>
@@ -122,7 +110,7 @@
     </form>
 </div>
 
-<script layout:fragment="script" type='text/javascript'>
+<script layout:fragment="script" type='text/javascript' th:inline="javascript">
     const delete_elements = document.getElementsByClassName("delete");
     Array.from(delete_elements).forEach(function (element) {
         element.addEventListener('click', function () {
@@ -139,7 +127,6 @@
             };
         });
     });
-    <!--답변페이징-->
     const page_elements = document.getElementsByClassName("page-link");
     Array.from(page_elements).forEach(function (element) {
         element.addEventListener('click', function () {
@@ -147,6 +134,24 @@
             document.getElementById('answerPageForm').submit();
         });
     });
+    document.addEventListener('DOMContentLoaded', function () {
+        const paginationLinks = document.querySelectorAll('.page-link');
+        paginationLinks.forEach(function (link) {
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+                const pageNumber = this.getAttribute('data-page');
+                if (pageNumber !== null) {
+                    const form = document.getElementById('answerPageForm');
+                    form.answerPage.value = pageNumber;
+                    form.submit();
+                }
+            });
+        });
+    });
+    function onChangeSort() {
+        var sortOption = document.getElementById("sort").value;
+        window.location.href = window.location.pathname + "?answerPage=0&sort=" + sortOption;
+    }
 </script>
 
 </html>
