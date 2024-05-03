@@ -17,4 +17,12 @@ public class MainController {
     public String root() {
         return "redirect:/question/list";
     }
+
+
+    @GetMapping("/test")
+    @ResponseBody
+    public String test(Integer num) {
+        System.out.println(num);
+        return "test";
+    }
 }

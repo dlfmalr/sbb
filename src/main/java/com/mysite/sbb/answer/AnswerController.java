@@ -39,8 +39,6 @@ public class AnswerController {
             return "question_detail";
         }
         Answer answer = this.answerService.create(question, answerForm.getContent(), siteUser);
-        int page = question.getAnswerList().size() / 5;
-        re.addAttribute("answerPage", page);
         return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());
     }
 
