@@ -1,6 +1,7 @@
 package com.mysite.sbb.comment;
 
 import com.mysite.sbb.answer.Answer;
+import com.mysite.sbb.question.Question;
 import com.mysite.sbb.user.SiteUser;
 import groovyjarjarpicocli.CommandLine;
 import jakarta.persistence.*;
@@ -23,9 +24,13 @@ public class Comment {
     private LocalDateTime createDate;
 
     @ManyToOne
+    private Question question;
+
+    @ManyToOne
     private Answer answer;
 
     @ManyToOne
     private SiteUser author;
+
 
 }

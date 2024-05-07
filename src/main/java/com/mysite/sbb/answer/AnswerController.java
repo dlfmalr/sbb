@@ -85,4 +85,11 @@ public class AnswerController {
         this.answerService.vote(answer, siteUser);
         return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());
     }
+
+    @GetMapping("/detail/{id}")
+    public String detail(Model model, @PathVariable("id") Integer id) {
+        Answer answer = this.answerService.getAnswer(id);
+        model.addAttribute("answer", answer);
+        return "answer_detail";
+    }
 }
